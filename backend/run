@@ -1,0 +1,4 @@
+#!/bin/bash
+cd ~/d/ghrepo/playto/backend
+source venv/bin/activate
+python manage.py "$@"
