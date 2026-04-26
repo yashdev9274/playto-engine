@@ -74,3 +74,34 @@ class LedgerView(APIView):
             'page_size': page_size,
             'results': serializer.data
         })
+
+
+class AddFundsView(APIView):
+    """POST /api/v1/merchants/me/ledger/add-funds"""
+    authentication_classes = [MerchantAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        amount_paise = request.data.get('amount_paise')
+        description = request.data.get('description', 'Funds added')
+
+        if not amount_paise or amount_paise <= 0:
+            return Response(
+                {'error': 'Invalid amount'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Create credit entry
+        LedgerService.create_entry(
+            merchant_id=request.merchant.id,
+            entry_type='credit',
+            amount_paise=amount_paise,
+            reference_type='payment',
+            description=description
+        )
+
+        return Response({
+            'success': True,
+            'amount_paise': amount_paise,
+            'message': f'Added ₹{amount_paise / 100}'
+        })

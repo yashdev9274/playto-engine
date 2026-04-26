@@ -80,7 +80,8 @@ class PayoutViewSet(APIView):
             expires_at=timezone.now() + timedelta(hours=24)
         )
 
-        # Queue Celery task (async processing)
-        process_payout.delay(str(payout.id))
+        # Process payout synchronously (for demo without Celery)
+        from payouts.tasks import process_payout_sync
+        process_payout_sync(str(payout.id))
 
         return Response(payout_response, status=status.HTTP_201_CREATED)

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -94,7 +95,9 @@ REST_FRAMEWORK={
     ],
 }
 
-CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'https://playto-frontend.vercel.app', 'https://playto-*.vercel.app']
+CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001', 'https://playto-frontend.vercel.app', 'https://playto-*.vercel.app']
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = ['*']
 
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'

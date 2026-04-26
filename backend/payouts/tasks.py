@@ -13,18 +13,18 @@ def simulate_bank_settlement():
     else:
         return 'processing'
 
-@shared_task(binf=True, max_retries=3)
+@shared_task(bind=True, max_retries=3)
 def process_payout(self, payout_id):
     from .models import Payout
     from .services import PayoutService
 
-    payout = Payout.object.get(id=payout_id)
+    payout = Payout.objects.get(id=payout_id)
 
     if payout.status != 'pending':
         return
 
     payout.status = 'processing'
-    payout.attempt_coumt +=1
+    payout.attempt_count += 1
     payout.save()
 
     result = simulate_bank_settlement()
@@ -45,6 +45,37 @@ def process_payout(self, payout_id):
             countdown = 30 * (2 ** payout.attempt_count)
             self.retry(countdown=countdown)
             
+    else:
+        payout.status = 'failed'
+        payout.failure_reason = 'Bank settlement failed'
+        payout.processed_at = timezone.now()
+        payout.save()
+        PayoutService.return_funds(payout)
+
+
+def process_payout_sync(payout_id):
+    """Synchronous version for demo without Celery"""
+    from .models import Payout
+    from .services import PayoutService
+
+    payout = Payout.objects.get(id=payout_id)
+
+    if payout.status != 'pending':
+        return
+
+    payout.status = 'processing'
+    payout.attempt_count += 1
+    payout.save()
+
+    result = simulate_bank_settlement()
+
+    if result == 'success':
+        payout.status = 'completed'
+        payout.processed_at = timezone.now()
+        payout.save()
+    elif result == 'processing':
+        payout.status = 'pending'
+        payout.save()
     else:
         payout.status = 'failed'
         payout.failure_reason = 'Bank settlement failed'
