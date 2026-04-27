@@ -2,6 +2,17 @@
 
 A minimal payout engine for Indian agencies and freelancers to collect international payments.
 
+## Demo Video
+
+<video controls width="100%">
+  <source src="playto-engine-demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+*[Download demo video](playto-engine-demo.mp4)*
+
+---
+
 ## Quick Start
 
 ### Option A: Docker (Recommended)
