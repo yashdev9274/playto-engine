@@ -6,3 +6,4 @@ redis>=5.0
 django-cors-headers>=4.3
 gunicorn>=21.0
 python-dotenv>=1.0
+dj-database-url>=2.0

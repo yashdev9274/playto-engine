@@ -10,10 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from .env if not in Docker
+if not os.environ.get('DOCKER'):
+    from dotenv import load_dotenv
+    load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -82,10 +89,9 @@ WSGI_APPLICATION = 'playto.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.parse(
+        os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3')
+    )
 }
 
 REST_FRAMEWORK={
@@ -98,6 +104,8 @@ REST_FRAMEWORK={
 CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000', 'http://127.0.0.1:3001', 'https://playto-frontend.vercel.app', 'https://playto-*.vercel.app']
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ['*']
+CORS_EXPOSE_HEADERS = ['Content-Type', 'Authorization', 'Idempotency-Key']
+CORS_PREFLOW_ALLOW_ALL_ORIGINS = True
 
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'

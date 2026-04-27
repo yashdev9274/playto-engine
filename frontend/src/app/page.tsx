@@ -17,7 +17,7 @@ export default function HomePage() {
     setError('');
 
     if (email && apiKey) {
-      localStorage.setItem('playto_token', apiKey);
+      localStorage.setItem('playto_token', apiKey.trim());
       localStorage.setItem('playto_merchant_name', email);
       router.push('/dashboard');
     } else {
@@ -44,7 +44,7 @@ export default function HomePage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+              className="w-full px-4 py-2.5 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
               placeholder="merchant@example.com"
               required
             />
@@ -55,7 +55,7 @@ export default function HomePage() {
               type="text"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition font-mono text-sm"
+              className="w-full px-4 py-2.5 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition font-mono text-sm"
               placeholder="Your API key from seed"
               required
             />
@@ -70,10 +70,15 @@ export default function HomePage() {
           </button>
         </form>
 
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-          <p className="text-sm text-gray-600">
-            <span className="font-medium">Demo:</span> Use the API key from running the seed script
-          </p>
+        <div className="mt-6 p-4 bg-gray-50 rounded-lg text-sm">
+          <p className="font-medium text-gray-700 mb-2">Demo Credentials:</p>
+          <div className="space-y-1 text-gray-600">
+            <p><span className="font-medium">Email:</span> acme@example.com</p>
+            <p><span className="font-medium">API Key:</span></p>
+            <code className="block mt-1 p-2 bg-white rounded border text-xs break-all select-all">
+              1b5e0f08f07ff0aeba3348503730e0870bd01ae8f31c3cdc3ef53b264a4ad23a
+            </code>
+          </div>
         </div>
       </div>
     </div>
