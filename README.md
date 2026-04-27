@@ -4,6 +4,12 @@ A minimal payout engine for Indian agencies and freelancers to collect internati
 
 ## Demo Video
 
+
+
+https://github.com/user-attachments/assets/d27c9a0a-8117-4e21-bcaf-a0ee85294200
+
+
+
 <video controls width="100%">
   <source src="playto-engine-demo.mp4" type="video/mp4">
   Your browser does not support the video tag.
