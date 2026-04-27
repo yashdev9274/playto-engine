@@ -1,4 +1,4 @@
-import { Balance, LedgerResponse, Payout, PayoutRequest } from '@/types';
+import { Balance, LedgerResponse, Payout, PayoutRequest, Transfer } from '@/types';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -64,5 +64,27 @@ export const api = {
       body: JSON.stringify({ amount_paise: amountPaise, description }),
     });
     return handleResponse(response);
+  },
+
+  async transfer(token: string, toMerchantEmail: string, amountPaise: number): Promise<Transfer> {
+    const response = await fetch(`${API_BASE}/api/v1/transfers`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        to_merchant_email: toMerchantEmail, 
+        amount_paise: amountPaise 
+      }),
+    });
+    return handleResponse<Transfer>(response);
+  },
+
+  async getTransfers(token: string): Promise<Transfer[]> {
+    const response = await fetch(`${API_BASE}/api/v1/transfers`, {
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    return handleResponse<Transfer[]>(response);
   },
 };

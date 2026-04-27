@@ -40,3 +40,16 @@ export interface PayoutRequest {
   amount_paise: number;
   bank_account_id: string;
 }
+
+export interface Transfer {
+  id: string;
+  from_merchant: string;
+  from_merchant_email: string;
+  to_merchant: string;
+  to_merchant_email: string;
+  amount_paise: number;
+  status: 'pending' | 'completed' | 'failed';
+  failure_reason: string | null;
+  created_at: string;
+  completed_at: string | null;
+}

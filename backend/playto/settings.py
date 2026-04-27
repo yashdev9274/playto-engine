@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'merchants',
     'ledger',
     'payouts',
-    'idempotency'
+    'idempotency',
+    'transfers',
 ]
 
 MIDDLEWARE = [

@@ -9,6 +9,7 @@ import LedgerTable from '@/components/LedgerTable';
 import PayoutForm from '@/components/PayoutForm';
 import PayoutHistory from '@/components/PayoutHistory';
 import AddFundsForm from '@/components/AddFundsForm';
+import TransferForm from '@/components/TransferForm';
 import Header from '@/components/Header';
 
 export default function DashboardPage() {
@@ -77,6 +78,11 @@ export default function DashboardPage() {
     [token, loadData]
   );
 
+  const handleTransfer = useCallback(async () => {
+    if (!token) return;
+    await loadData(token);
+  }, [token, loadData]);
+
   const handleLogout = () => {
     localStorage.removeItem('playto_token');
     localStorage.removeItem('playto_merchant_name');
@@ -110,6 +116,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 gap-6">
             <PayoutForm onSubmit={handlePayout} />
             <AddFundsForm onAdd={handleAddFunds} />
+            <TransferForm token={token || ''} onTransferComplete={handleTransfer} />
           </div>
           <PayoutHistory payouts={payouts} />
         </div>
