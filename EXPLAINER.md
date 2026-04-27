@@ -2,6 +2,12 @@
 
 ## 1. The Ledger - Balance Calculation Query
 
+<img width="3705" height="1950" alt="PE1" src="https://github.com/user-attachments/assets/bd543bd7-6d45-443a-b024-24c38290f644" />
+
+<br>
+<img width="1437" height="2760" alt="Pe1-" src="https://github.com/user-attachments/assets/38d5c17e-54d4-4e7e-8d1a-6c183a7cbfff" />
+
+
 ```python
 # From ledger/services.py
 
@@ -33,6 +39,9 @@ Each `LedgerEntry` has an `entry_type` (credit or debit). We use database-level 
 
 ## 2. The Lock - Preventing Concurrent Overdraws
 
+<img width="4792" height="3333" alt="pe2" src="https://github.com/user-attachments/assets/5cb02a69-b1a4-41aa-81cb-970f036f101c" />
+
+
 ```python
 # From payouts/services.py
 @staticmethod
@@ -60,6 +69,10 @@ The second thread fails fast with a locking error, preventing the race condition
 ---
 
 ## 3. The Idempotency - How It Works
+
+<img width="1730" height="3450" alt="pe4" src="https://github.com/user-attachments/assets/3d80cf7d-69fc-4789-ae20-9dc50d044d70" />
+
+
 
 ```python
 # From payouts/views.py
@@ -108,6 +121,9 @@ In practice, we mitigate this by:
 ---
 
 ## 4. The State Machine - Blocking Invalid Transitions
+
+<img width="5547" height="3471" alt="pe3" src="https://github.com/user-attachments/assets/55485ff3-ccfc-411a-9a43-737efb28d50c" />
+
 
 **State diagram:**
 ```
@@ -158,6 +174,8 @@ The state machine is enforced at the worker level - transitions only happen with
 ## 5. AI Audit - Where AI Wrote Wrong Code
 
 **Example 1: Typo in Celery task (process_payout)**
+
+
 
 AI originally wrote:
 ```python
@@ -237,10 +255,13 @@ services:
     build: ./backend
     command: celery -A playto worker --loglevel=info
 ```
+> I choose this specificallky cause it is the most import one for the local development, so that it will help to set it up locally
 
 ### 2. Inter-Merchant Transfers (transfers app)
 
 Transfer funds between merchant accounts atomically:
+
+> I've added this additional feature from my side to transfer funds using user's mail
 
 ```python
 @transaction.atomic
@@ -253,5 +274,7 @@ def create_transfer(from_merchant, to_merchant_email, amount_paise):
     LedgerService.create_entry(from_merchant.id, 'debit', amount_paise, ...)
     LedgerService.create_entry(to_merchant.id, 'credit', amount_paise, ...)
 ```
+
+
 
 API: `POST /api/v1/transfers` with `{ to_merchant_email, amount_paise }`
